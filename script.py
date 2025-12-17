@@ -10,6 +10,8 @@ def signal_handler(signal, frame):
     print("\nProgram exiting gracefully...")
     sys.exit(0)
 
+signal.signal(signal.SIGINT, signal_handler)
+
 INFLUXDB_HOST = os.environ.get("INFLUXDB_HOST")
 if INFLUXDB_HOST is None:
     print("Missing environment variable INFLUXDB_HOST", file=sys.stderr)
