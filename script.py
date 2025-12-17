@@ -4,6 +4,11 @@ import requests
 import threading
 import os
 import sys
+import signal
+
+def signal_handler(signal, frame):
+    print("\nProgram exiting gracefully...")
+    sys.exit(0)
 
 INFLUXDB_HOST = os.environ.get("INFLUXDB_HOST")
 if INFLUXDB_HOST is None:
@@ -46,19 +51,16 @@ influx = influx_client.write_api()
 
 def write_to_influx(message_name: str, message_value: str|float|int, timestamp: int):
     if not timestamp > last_sent_timestamps.get(message_name, 0):
-        print(f"Value {message_name} not updated.")
+        # print(f"Value {message_name} not updated.")
         return
     if type(message_value) is str:
         if message_value in ("on", "off"):
             boolean_value = boolean_mapping.get(message_value)
             line = f"heating {message_name}={"true" if boolean_value else "false"} {timestamp}"
-            print(line)
         else:
             line = f"heating {message_name}=\"{message_value}\" {timestamp}"
-            print(line)
     elif type(message_value) is float or int:
         line = f"heating {message_name}={message_value} {timestamp}"
-        print(line)
     else:
         print(f"Unhandled message_value data type: {type(message_value)}.")
         return
@@ -73,22 +75,18 @@ def run():
             continue
         json = ebusd_response.json()
         if "bai" not in json:
-            print(f"Value for {message} is unchanged.")
+            # print(f"Value for {message} is unchanged.")
             continue
         timestamp = json[EBUSD_CIRCUIT]["messages"][message]["lastup"]
         fields = json[EBUSD_CIRCUIT]["messages"][message]["fields"]
         if "value" in fields:
             value = fields["value"]["value"]
-            print(value)
         elif "temp" in fields:
             value = fields["temp"]["value"]
-            print(value)
         else:
-            print("No matching field type found.")
+            print("No matching field type found.", file=sys.stderr)
             continue
         write_to_influx(message_name=message, message_value=value, timestamp=timestamp)
-    print(80*"-")
-            
             
 ticker = threading.Event()
 while not ticker.wait(10):
