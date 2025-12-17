@@ -1,0 +1,13 @@
+services:
+  ebusd-influx:
+    container_name: ebusd-influx
+    image: ebusd-influx:latest
+    environment:
+      - INFLUXDB_HOST=https://my-influx-host:8086
+      - INFLUXDB_ORG=my-org
+      - INFLUXDB_TOKEN=my-token
+      - INFLUXDB_BUCKET=ebusd
+      - EBUSD_API_BASE=https://my-ebusd-host:1234
+      - EBUSD_CIRCUIT=bai
+      - EBUSD_MESSAGES=FlowTemp,FlowTempDesired,ReturnTemp,StorageTemp,StorageTempDesired,StorageExitTemp,PrimaryCircuitFlowrate,PositionValveSet,ModulationDesired,Flame,RemainingBoilerblocktime
+    restart: unless-stopped
