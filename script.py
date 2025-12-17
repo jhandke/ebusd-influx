@@ -6,11 +6,16 @@ import os
 import sys
 import signal
 
-def signal_handler(signal, frame):
+def signal_handler_int(signal, frame):
     print("\nProgram exiting gracefully...")
     sys.exit(0)
 
-signal.signal(signal.SIGINT, signal_handler)
+def signal_handler_term(signal, frame):
+    print("\nProgram terminating gracefully...")
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler_int)
+signal.signal(signal.SIGTERM, signal_handler_term)
 
 INFLUXDB_HOST = os.environ.get("INFLUXDB_HOST")
 if INFLUXDB_HOST is None:
