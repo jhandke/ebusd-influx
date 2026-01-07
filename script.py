@@ -90,6 +90,8 @@ def run():
             value = fields["value"]["value"]
         elif "temp" in fields:
             value = fields["temp"]["value"]
+        elif "press" in fields:
+            value = fields["press"]["value"]
         else:
             print("No matching field type found.", file=sys.stderr)
             continue
