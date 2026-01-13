@@ -9,5 +9,5 @@ services:
       - INFLUXDB_BUCKET=ebusd
       - EBUSD_API_BASE=https://my-ebusd-host:1234
       - EBUSD_CIRCUIT=bai
-      - EBUSD_MESSAGES=FlowTemp,FlowTempDesired,ReturnTemp,StorageTemp,StorageTempDesired,StorageExitTemp,PrimaryCircuitFlowrate,PositionValveSet,ModulationDesired,Flame,RemainingBoilerblocktime
+      - EBUSD_MESSAGES=FlowTemp,FlowTempDesired,ReturnTemp,StorageTemp,StorageTempDesired,StorageExitTemp,PrimaryCircuitFlowrate,PositionValveSet,ModulationDesired,Flame,RemainingBoilerblocktime,OutdoorstempSensor
     restart: unless-stopped
